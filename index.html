@@ -37,7 +37,7 @@
 
     /* simple controls */
     .controls{display:flex;align-items:center;gap:10px;padding:10px}
-    .play{width:44px;height:44px;border-radius:8px;border:0;background:var(--accent);color:white;font-weight:800;font-size:16px;cursor:pointer}
+    .play{width:44px;height:44px;border-radius:8px;border:0;background:var(--accent);color:white;font-weight:800;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
     .bar-wrap{flex:1;height:10px;background:rgba(2,6,23,0.08);border-radius:8px;cursor:pointer;position:relative}
     .bar{position:absolute;left:0;top:0;bottom:0;width:0%;background:var(--accent);border-radius:8px}
     .time{font-family:monospace;font-size:0.95rem;color:var(--muted);min-width:80px;text-align:center}
@@ -48,6 +48,51 @@
     .end button{padding:10px 16px;border-radius:8px;border:0;background:white;color:#0f172a;font-weight:700;cursor:pointer}
 
     footer{margin-top:16px;text-align:center;color:var(--muted);font-size:0.9rem}
+
+    /* slight spacing for fullscreen button on small screens */
+    @media (max-width:520px){
+      .time{min-width:60px;font-size:0.9rem}
+      .play{width:48px;height:48px}
+    }
+
+    .contact-footer{
+    margin-top:20px;
+    padding-top:14px;
+    border-top:1px solid #e5e7eb;
+    text-align:center;
+  }
+
+  .contact-text{
+    color:var(--muted);
+    font-size:0.95rem;
+    margin-bottom:10px;
+  }
+
+  .contact-links{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    align-items:center;
+  }
+
+  .contact-links a{
+  width:52px;
+  height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  background:#f8fafc;
+  text-decoration:none;
+}
+
+.contact-links img{
+  width:48px;
+  height:48px;
+  object-fit:contain;   /* THIS is the magic */
+  display:block;
+}
+
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -75,34 +120,84 @@
         <video id="video" preload="metadata" playsinline webkit-playsinline></video>
 
         <div id="endScreen" class="end hidden">
-          <div style="font-size:1.2rem;font-weight:800">از تماشای ویدیو متشکریم 🙏</div>
+          <div style="font-size:1.2rem;font-weight:800">از تماشای ویدیو متشکرم 🙏</div>
           <div style="font-size:1rem">برای مشاهده مجدد، دکمه تکرار را بزنید.</div>
-          <div style="margin-top:6px;font-weight:700">سوالی دارید؟ تماس یا پیامک: +1 (555) 123‑4567</div>
           <button id="replayBtn">تکرار</button>
+          <div style="margin-top:6px;font-weight:700">شماره تماس من : <br>09373722155</div>
         </div>
       </div>
 
       <div class="controls">
-        <button id="playBtn" class="play">►</button>
+        <button id="playBtn" class="play" aria-label="پخش">►</button>
         <div id="barWrap" class="bar-wrap"><div id="bar" class="bar"></div></div>
         <div id="time" class="time">0:00 / 0:00</div>
+        <!-- fullscreen button -->
+        <button id="fsBtn" class="play" aria-label="تمام صفحه">⛶</button>
       </div>
     </section>
 
-    <footer>
-      Simple, private, no apps required. Works on phones and computers.
-    </footer>
+    <footer class="contact-footer">
+        <div class="contact-text">
+          در صورت داشتن هرگونه سؤال، خوشحال می‌شوم در تماس باشید:
+        </div>
+      
+        <div class="contact-links">
+          <!-- Phone -->
+          <a href="tel:+989373722155" aria-label="تماس تلفنی">
+            <span class="phone-icon">📞</span>
+          </a>
+      
+          <!-- WhatsApp -->
+          <a href="https://wa.me/0989373722155" target="_blank" rel="noopener" aria-label="واتساپ">
+            <img src="icons/whatsapp.svg" alt="WhatsApp">
+          </a>
+      
+          <!-- Eitaa -->
+          <a href="https://eitaa.com/@Yes_thats_my_username" target="_blank" rel="noopener" aria-label="ایتا">
+            <img src="icons/eitaa.svg" alt="Eitaa">
+          </a>
+        </div>
+      </footer>
+      
+      
+      
   </main>
 
   <script>
     // ===== CONFIG =====
     // Use numeric strings as keys (10-digit national IDs). Update to match your filenames.
     const videos = {
-      '0123456789': 'videos/student-anna.mp4',
-      '9876543210': 'videos/student-ben.mp4'
-      // add more codes here as 10-digit strings
+        '9876543211': 'videos/MohammadRezaShirvani.mp4',
+        '1747347817': 'videos/AlirezaMardasi.mp4',
+        '1747246621': 'videos/AlirezaMaskooli.mp4',
+        '1747149391': 'videos/AmirAliMemar.mp4',
+        '1747215201': 'videos/AradHajiPoor.mp4',
+        '1747277630': 'videos/DanialHamidiNeek.mp4',
+        '1747049530': 'videos/EliyasJamee.mp4',
+        '1747056332': 'videos/HaniBaniNemeh.mp4',
+        '1747287903': 'videos/MiladEbadi.mp4',
+        '7490000556': 'videos/MohammadAminAtabi.mp4',
+        '1747021369': 'videos/MohammadAminHamidZoeri.mp4',
+        '1747126233': 'videos/MohammadEhsanAliMohammadi.mp4',
+        '1747232580': 'videos/MohammadHadiHamidavi.mp4',
+        '1747065242': 'videos/MohammadHasanBadvi.mp4',
+        '1747132391': 'videos/MohammadHasanRahooli.mp4',
+        '1747166995': 'videos/MohammadHasanSaediZade.mp4',
+        '0374451133': 'videos/MohammadHossienAmiriFard.mp4',
+        '7490000149': 'videos/MohammadHossienChaabi.mp4',
+        '1747317020': 'videos/MohammadJavadMohammadZade.mp4',
+        '1747283576': 'videos/MohammadMokhtarMoosavi.mp4',
+        '1746989981': 'videos/MohammadTahaEbadi.mp4',
+        '1747166480': 'videos/MohammadTahaHamidavi.mp4',
+        '1747083038': 'videos/MohammadTahaSheheitat.mp4',
+        '1747315206': 'videos/MortezaHamidi.mp4',
+        '1747140406': 'videos/MostafaHamidiNeek.mp4',
+        '1747113018': 'videos/MostafaZoeri.mp4',
+        '1747327395': 'videos/SamyarMohammadZade.mp4',
+        '1747166571': 'videos/TahaMoosavi.mp4'
     };
-    const PHONE = '+1 (555) 123‑4567';
+
+    const PHONE = '+98 937 3722155';
     const CODE_LENGTH = 10; // require exactly 10 digits
     // ==================
 
@@ -117,6 +212,7 @@
     const endScreen = document.getElementById('endScreen');
     const replayBtn = document.getElementById('replayBtn');
     const errorBox = document.getElementById('errorBox');
+    const fsBtn = document.getElementById('fsBtn');
 
     // show error in Persian; pre-defined messages
     function showError(key){
@@ -198,6 +294,44 @@
 
     video.addEventListener('ended', ()=>{ endScreen.classList.remove('hidden'); });
     replayBtn.addEventListener('click', ()=>{ endScreen.classList.add('hidden'); video.currentTime = 0; video.play(); });
+
+    // ---------- Fullscreen control ----------
+    function updateFsButton(){
+      // show '⛶' when not fullscreen, '✕' when in fullscreen
+      try{
+        const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.webkitIsFullScreen);
+        fsBtn.textContent = isFs ? '✕' : '⛶';
+      }catch(e){
+        fsBtn.textContent = '⛶';
+      }
+    }
+
+    fsBtn.addEventListener('click', () => {
+      // If currently fullscreen, exit
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) document.exitFullscreen().catch(()=>{});
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen && document.webkitExitFullscreen();
+      } else {
+        // Request fullscreen on the video element (best for mobile)
+        if (video.requestFullscreen) {
+          video.requestFullscreen().catch(()=>{});
+        } else if (video.webkitEnterFullscreen) {
+          // iOS Safari specific fullscreen for video
+          try { video.webkitEnterFullscreen(); } catch(e) {}
+        } else if (video.webkitRequestFullScreen) {
+          video.webkitRequestFullScreen && video.webkitRequestFullScreen();
+        }
+      }
+    });
+
+    // update button when fullscreen state changes
+    document.addEventListener('fullscreenchange', updateFsButton);
+    document.addEventListener('webkitfullscreenchange', updateFsButton);
+    document.addEventListener('MSFullscreenChange', updateFsButton);
+
+    // initial button state
+    updateFsButton();
+    // ----------------------------------------
 
   </script>
 </body>
