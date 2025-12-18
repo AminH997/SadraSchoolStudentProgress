@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Welcome — Student Progress Video</title>
+  <meta name="description" content="Parents enter a student code to watch a short progress video. Simple, mobile-friendly, one page." />
+  <style>
+    :root{--accent:#2563eb;--bg:#f7f9fc;--card:#ffffff;--muted:#6b7280;--err:#ef4444}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:18px;color:#0f172a;font-family:Vazirmatn, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif}
+
+    .card{width:100%;max-width:760px;background:var(--card);border-radius:14px;box-shadow:0 10px 30px rgba(2,6,23,0.08);padding:24px}
+
+    /* welcome */
+    .welcome{text-align:center;display:flex;flex-direction:column;gap:10px}
+    .welcome h1{margin:0;font-size:1.6rem}
+    .welcome p{margin:0;color:var(--muted);font-size:1rem}
+
+    /* code input */
+    .code-box{margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    input[type="text"]{padding:14px 16px;font-size:1.05rem;border-radius:10px;border:1px solid #e5e7eb;min-width:220px}
+    button.primary{padding:14px 18px;font-size:1.05rem;border-radius:10px;border:0;background:var(--accent);color:white;font-weight:700;cursor:pointer}
+
+    /* override for numeric code input: left-to-right inside RTL page */
+    #codeInput{direction:ltr;text-align:left;letter-spacing:1px}
+
+    /* error box */
+    #errorBox{display:none;margin-top:12px;border-radius:10px;padding:12px;background:rgba(239,68,68,0.08);color:var(--err);border:1px solid rgba(239,68,68,0.18);text-align:center}
+
+    /* player */
+    .player-wrap{margin-top:22px;display:none;flex-direction:column;gap:10px}
+    .video-box{background:#000;border-radius:12px;overflow:hidden;position:relative}
+    video{width:100%;display:block;background:#000}
+
+    /* simple controls */
+    .controls{display:flex;align-items:center;gap:10px;padding:10px}
+    .play{width:44px;height:44px;border-radius:8px;border:0;background:var(--accent);color:white;font-weight:800;font-size:16px;cursor:pointer}
+    .bar-wrap{flex:1;height:10px;background:rgba(2,6,23,0.08);border-radius:8px;cursor:pointer;position:relative}
+    .bar{position:absolute;left:0;top:0;bottom:0;width:0%;background:var(--accent);border-radius:8px}
+    .time{font-family:monospace;font-size:0.95rem;color:var(--muted);min-width:80px;text-align:center}
+
+    /* end screen */
+    .end{position:absolute;inset:0;background:rgba(2,6,23,0.55);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:20px}
+    .end.hidden{display:none}
+    .end button{padding:10px 16px;border-radius:8px;border:0;background:white;color:#0f172a;font-weight:700;cursor:pointer}
+
+    footer{margin-top:16px;text-align:center;color:var(--muted);font-size:0.9rem}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="card">
+    <!-- WELCOME -->
+    <section class="welcome">
+      <h1>سلام — خوش آمدید 👋</h1>
+      <p>👇 لطفاً کد ملی فرزندتان را دقیق و با ارقام انگلیسی وارد کنید (۱۰ رقم)</p>
+    </section>
+
+    <!-- CODE INPUT -->
+    <section class="code-box">
+      <input id="codeInput" type="text" placeholder="کد ملی (مثال: 0123456789)" autocomplete="off" inputmode="numeric" maxlength="10" aria-label="کد ملی" />
+      <button id="seeBtn" class="primary">مشاهده ویدیو</button>
+    </section>
+
+    <div id="errorBox" role="alert" aria-live="assertive"></div>
+
+    <!-- PLAYER -->
+    <section id="playerWrap" class="player-wrap">
+      <div class="video-box">
+        <video id="video" preload="metadata" playsinline webkit-playsinline></video>
+
+        <div id="endScreen" class="end hidden">
+          <div style="font-size:1.2rem;font-weight:800">از تماشای ویدیو متشکریم 🙏</div>
+          <div style="font-size:1rem">برای مشاهده مجدد، دکمه تکرار را بزنید.</div>
+          <div style="margin-top:6px;font-weight:700">سوالی دارید؟ تماس یا پیامک: +1 (555) 123‑4567</div>
+          <button id="replayBtn">تکرار</button>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="playBtn" class="play">►</button>
+        <div id="barWrap" class="bar-wrap"><div id="bar" class="bar"></div></div>
+        <div id="time" class="time">0:00 / 0:00</div>
+      </div>
+    </section>
+
+    <footer>
+      Simple, private, no apps required. Works on phones and computers.
+    </footer>
+  </main>
+
+  <script>
+    // ===== CONFIG =====
+    // Use numeric strings as keys (10-digit national IDs). Update to match your filenames.
+    const videos = {
+      '0123456789': 'videos/student-anna.mp4',
+      '9876543210': 'videos/student-ben.mp4'
+      // add more codes here as 10-digit strings
+    };
+    const PHONE = '+1 (555) 123‑4567';
+    const CODE_LENGTH = 10; // require exactly 10 digits
+    // ==================
+
+    const codeInput = document.getElementById('codeInput');
+    const seeBtn = document.getElementById('seeBtn');
+    const playerWrap = document.getElementById('playerWrap');
+    const video = document.getElementById('video');
+    const playBtn = document.getElementById('playBtn');
+    const barWrap = document.getElementById('barWrap');
+    const bar = document.getElementById('bar');
+    const time = document.getElementById('time');
+    const endScreen = document.getElementById('endScreen');
+    const replayBtn = document.getElementById('replayBtn');
+    const errorBox = document.getElementById('errorBox');
+
+    // show error in Persian; pre-defined messages
+    function showError(key){
+      let msg = '';
+      if(key === 'empty') msg = 'لطفاً کد ملی را وارد کنید.';
+      else if(key === 'digits') msg = 'کد باید فقط شامل ارقام باشد (0-9).';
+      else if(key === 'length') msg = `کد باید دقیقاً ${CODE_LENGTH} رقم باشد.`;
+      else if(key === 'notfound') msg = 'این کد ثبت نشده است، از شامل بودن فرزندان در لیست اطمینان حاصل فرمایید و یا کد را دوباره چک کنید';
+      else msg = 'خطا. لطفاً دوباره تلاش کنید.';
+
+      errorBox.textContent = msg;
+      errorBox.style.display = 'block';
+      // subtle focus for screen readers
+      errorBox.focus && errorBox.focus();
+    }
+
+    function clearError(){
+      errorBox.textContent = '';
+      errorBox.style.display = 'none';
+    }
+
+    // strip non-digit characters as user types (helps when pasting)
+    codeInput.addEventListener('input', ()=>{
+      const cleaned = codeInput.value.replace(/[^0-9]/g, '');
+      if(codeInput.value !== cleaned) codeInput.value = cleaned;
+      // enforce maxlength just in case
+      if(codeInput.value.length > CODE_LENGTH) codeInput.value = codeInput.value.slice(0, CODE_LENGTH);
+      clearError();
+    });
+
+    function validateCode(raw){
+      const code = (raw||'').trim();
+      if(!code) return 'empty';
+      if(!/^[0-9]+$/.test(code)) return 'digits';
+      if(code.length !== CODE_LENGTH) return 'length';
+      return null;
+    }
+
+    function loadVideo(){
+      clearError();
+      const code = codeInput.value.trim();
+      const invalid = validateCode(code);
+      if(invalid){ showError(invalid); return; }
+
+      const src = videos[code];
+      if(!src){ showError('notfound'); return; }
+
+      // success: load video
+      video.src = src;
+      video.load();
+      playerWrap.style.display = 'flex';
+      endScreen.classList.add('hidden');
+
+      // put focus to video for accessibility
+      setTimeout(()=> video.focus && video.focus(), 300);
+
+      // try to play
+      video.play().catch(()=>{});
+
+      // remember last code
+      try{ localStorage.setItem('lastCode', code); }catch(e){}
+    }
+
+    seeBtn.addEventListener('click', loadVideo);
+    codeInput.addEventListener('keydown', e=>{ if(e.key==='Enter') loadVideo(); });
+
+    // restore last code if available
+    try{ const last = localStorage.getItem('lastCode'); if(last) codeInput.value = last; }catch(e){}
+
+    // player controls
+    playBtn.addEventListener('click', ()=>{ if(video.paused) video.play(); else video.pause(); });
+    video.addEventListener('play', ()=> playBtn.textContent='❚❚');
+    video.addEventListener('pause', ()=> playBtn.textContent='►');
+
+    function formatTime(s){ if(!isFinite(s)) return '0:00'; s=Math.floor(s); const m=Math.floor(s/60); const r=s%60; return m+':' + (r<10?'0':'')+r; }
+    video.addEventListener('timeupdate', ()=>{ const p = (video.currentTime / video.duration) * 100 || 0; bar.style.width = p + '%'; time.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`; });
+
+    barWrap.addEventListener('click', e=>{ const r = barWrap.getBoundingClientRect(); const x = e.clientX - r.left; const pct = Math.min(Math.max(x/r.width,0),1); if(isFinite(video.duration)) video.currentTime = pct * video.duration; });
+
+    video.addEventListener('ended', ()=>{ endScreen.classList.remove('hidden'); });
+    replayBtn.addEventListener('click', ()=>{ endScreen.classList.add('hidden'); video.currentTime = 0; video.play(); });
+
+  </script>
+</body>
+</html>
