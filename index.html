@@ -48,51 +48,6 @@
     .end button{padding:10px 16px;border-radius:8px;border:0;background:white;color:#0f172a;font-weight:700;cursor:pointer}
 
     footer{margin-top:16px;text-align:center;color:var(--muted);font-size:0.9rem}
-
-    /* slight spacing for fullscreen button on small screens */
-    @media (max-width:520px){
-      .time{min-width:60px;font-size:0.9rem}
-      .play{width:48px;height:48px}
-    }
-
-    .contact-footer{
-    margin-top:20px;
-    padding-top:14px;
-    border-top:1px solid #e5e7eb;
-    text-align:center;
-  }
-
-  .contact-text{
-    color:var(--muted);
-    font-size:0.95rem;
-    margin-bottom:10px;
-  }
-
-  .contact-links{
-    display:flex;
-    justify-content:center;
-    gap:12px;
-    align-items:center;
-  }
-
-  .contact-links a{
-  width:52px;
-  height:52px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:12px;
-  background:#f8fafc;
-  text-decoration:none;
-}
-
-.contact-links img{
-  width:48px;
-  height:48px;
-  object-fit:contain;   /* THIS is the magic */
-  display:block;
-}
-
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -100,6 +55,11 @@
 </head>
 <body>
   <main class="card">
+    <!-- school logo (3:4 portrait) -->
+<div class="logo-wrap" aria-hidden="false">
+  <img src="icons/sadra-logo.png" alt="لوگوی مدرسه صدرا" class="school-logo">
+</div>
+
     <!-- WELCOME -->
     <section class="welcome">
       <h1>سلام — خوش آمدید 👋</h1>
@@ -167,38 +127,11 @@
     // ===== CONFIG =====
     // Use numeric strings as keys (10-digit national IDs). Update to match your filenames.
     const videos = {
-        '1747117536': 'videos/MohammadRezaShirvani.mp4',
-        '1747194301': 'videos/AhmadNaseri.mp4',
-        '1747347817': 'videos/AlirezaMardasi.mp4',
-        '1747246621': 'videos/AlirezaMaskooli.mp4',
-        '1747149391': 'videos/AmirAliMemar.mp4',
-        '1747215201': 'videos/AradHajiPoor.mp4',
-        '1747277630': 'videos/DanialHamidiNeek.mp4',
-        '1747049530': 'videos/EliyasJamee.mp4',
-        '1747056332': 'videos/HaniBaniNemeh.mp4',
-        '1747287903': 'videos/MiladEbadi.mp4',
-        '7490000556': 'videos/MohammadAminAtabi.mp4',
-        '1747021369': 'videos/MohammadAminHamidZoeri.mp4',
-        '1747126233': 'videos/MohammadEhsanAliMohammadi.mp4',
-        '1747232580': 'videos/MohammadHadiHamidavi.mp4',
-        '1747065242': 'videos/MohammadHasanBadvi.mp4',
-        '1747132391': 'videos/MohammadHasanRahooli.mp4',
-        '1747166995': 'videos/MohammadHasanSaediZade.mp4',
-        '0374451133': 'videos/MohammadHossienAmiriFard.mp4',
-        '7490000149': 'videos/MohammadHossienChaabi.mp4',
-        '1747317020': 'videos/MohammadJavadMohammadZade.mp4',
-        '1747283576': 'videos/MohammadMokhtarMoosavi.mp4',
-        '1746989981': 'videos/MohammadTahaEbadi.mp4',
-        '1747166480': 'videos/MohammadTahaHamidavi.mp4',
-        '1747083038': 'videos/MohammadTahaSheheitat.mp4',
-        '1747315206': 'videos/MortezaHamidi.mp4',
-        '1747140406': 'videos/MostafaHamidiNeek.mp4',
-        '1747113018': 'videos/MostafaZoeri.mp4',
-        '1747327395': 'videos/SamyarMohammadZade.mp4',
-        '1747166571': 'videos/TahaMoosavi.mp4'
+      '0123456789': 'videos/student-anna.mp4',
+      '9876543210': 'videos/student-ben.mp4'
+      // add more codes here as 10-digit strings
     };
-
-    const PHONE = '+98 937 3722155';
+    const PHONE = '+1 (555) 123‑4567';
     const CODE_LENGTH = 10; // require exactly 10 digits
     // ==================
 
